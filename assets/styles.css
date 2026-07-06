@@ -1,0 +1,707 @@
+/* ─── 디자인 토큰: 색·크기 조정은 여기서 ─── */
+:root {
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --ink: #18181b;
+  --text: #3f3f46;
+  --muted: #6b7280;
+  --line: #e4e4e7;
+  --chip-bg: #f4f4f5;
+  --accent: #2563eb;
+  --accent-soft: #eff6ff;
+  --content: 1160px;
+  --radius: 14px;
+
+  /* **텍스트** 형광펜 배경 (다크모드에서는 더 진하게) */
+  --hl-bg: color-mix(in srgb, var(--accent) 24%, transparent);
+
+  /* 조직(org) 배지 색상 — 등장 순서대로 배정됩니다 */
+  --org-0: #2563eb; /* 티맥스 티베로 */
+  --org-1: #059669; /* Personal Project */
+  --org-2: #9333ea; /* SSAFY */
+
+  /* 폰트 크기 스케일 (여기만 바꾸면 전체에 반영됩니다) */
+  --fs-xs: 13px;   /* 역할 태그, 연락처 라벨 */
+  --fs-sm: 14px;   /* 네비게이션, 날짜, 섹션 소제목(배경/성과 등), 기술 칩 */
+  --fs-base: 16px; /* 본문, 불릿, 요약 문단 */
+  --fs-md: 17px;   /* 소개 문단, 회사명, 교육 항목명 */
+  --fs-lg: 20px;   /* 프로젝트 제목 */
+  --fs-xl: 24px;   /* 섹션 제목 (Experience, Projects …) */
+  --fs-display: clamp(28px, 4vw, 38px); /* 히어로 헤드라인 */
+}
+
+:root {
+  color-scheme: light;
+}
+
+/*
+ * 다크 팔레트.
+ * - 토글 버튼으로 고르면 <html data-theme="dark|light"> 가 붙습니다.
+ * - 고르지 않았을 때는 시스템 설정을 따라갑니다.
+ */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #101014;
+  --surface: #17171c;
+  --ink: #f4f4f5;
+  --text: #c7c9d1;
+  --muted: #9096a2;
+  --line: #26262e;
+  --chip-bg: #1f1f26;
+  --accent: #7aa5ff;
+  --accent-soft: #182036;
+  --hl-bg: color-mix(in srgb, var(--accent) 45%, transparent);
+  --org-0: #7aa5ff;
+  --org-1: #34d399;
+  --org-2: #c084fc;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #101014;
+    --surface: #17171c;
+    --ink: #f4f4f5;
+    --text: #c7c9d1;
+    --muted: #9096a2;
+    --line: #26262e;
+    --chip-bg: #1f1f26;
+    --accent: #7aa5ff;
+    --accent-soft: #182036;
+    --hl-bg: color-mix(in srgb, var(--accent) 45%, transparent);
+    --org-0: #7aa5ff;
+    --org-1: #34d399;
+    --org-2: #c084fc;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  background: var(--bg);
+  font-family:
+    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+  font-size: var(--fs-base);
+  line-height: 1.7;
+  letter-spacing: -0.01em;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol {
+  margin: 0;
+}
+
+section {
+  scroll-margin-top: 76px;
+}
+
+/* ─── 상단 네비게이션 ─── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  max-width: var(--content);
+  margin: 0 auto;
+  padding: 13px 24px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+.nav-links a {
+  border-radius: 8px;
+  padding: 6px 10px;
+  color: var(--muted);
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.nav-links a:hover {
+  color: var(--ink);
+  background: var(--chip-bg);
+}
+
+.nav-links .nav-cta {
+  margin-left: 6px;
+  border: 0;
+  border-radius: 999px;
+  padding: 7px 14px;
+  color: #fff;
+  background: var(--accent);
+  font: inherit;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.nav-links .nav-cta:hover {
+  color: #fff;
+  background: color-mix(in srgb, var(--accent) 85%, var(--ink));
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-left: 2px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0;
+  color: var(--muted);
+  background: var(--surface);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.theme-toggle:hover {
+  color: var(--ink);
+  background: var(--chip-bg);
+}
+
+/* ─── 레이아웃 ─── */
+.page {
+  max-width: var(--content);
+  margin: 0 auto;
+  padding: 0 24px 96px;
+}
+
+/* ─── 히어로 ─── */
+.hero {
+  padding: 80px 0 64px;
+  border-bottom: 1px solid var(--line);
+}
+
+.hero-kicker {
+  margin-bottom: 16px;
+  color: var(--accent);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+
+.hero h1 {
+  margin-bottom: 26px;
+  color: var(--ink);
+  font-size: var(--fs-display);
+  font-weight: 800;
+  line-height: 1.32;
+  letter-spacing: -0.03em;
+}
+
+.hero-intro {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 32px;
+  font-size: var(--fs-md);
+  line-height: 1.75;
+}
+
+.hero-contacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.hero-contacts li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 7px 15px;
+  background: var(--surface);
+  font-size: var(--fs-sm);
+}
+
+.hero-contacts span {
+  color: var(--muted);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.hero-contacts a {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.hero-contacts a:hover {
+  color: var(--accent);
+}
+
+/* ─── 섹션 공통 ─── */
+.section {
+  padding: 56px 0 0;
+}
+
+.section-title {
+  margin-bottom: 24px;
+  color: var(--ink);
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.section-lead {
+  margin: -10px 0 24px;
+  color: var(--muted);
+  font-size: var(--fs-base);
+}
+
+/* ─── 경력 ─── */
+.exp-list {
+  display: grid;
+  gap: 14px;
+  padding: 0;
+  list-style: none;
+}
+
+.exp-item {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  background: var(--surface);
+}
+
+.exp-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.exp-head strong {
+  color: var(--ink);
+  font-size: var(--fs-md);
+  font-weight: 750;
+}
+
+.exp-position {
+  margin-left: 8px;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+.exp-head time {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.exp-item p {
+  font-size: var(--fs-base);
+}
+
+/* ─── 기술 키워드 ─── */
+.skill-groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 32px;
+}
+
+.skill-group strong {
+  display: block;
+  margin-bottom: 9px;
+  color: var(--ink);
+  font-size: var(--fs-sm);
+  font-weight: 750;
+}
+
+.skill-group ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  list-style: none;
+}
+
+.skill-group li {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 12px;
+  color: var(--text);
+  background: var(--chip-bg);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+/* ─── 프로젝트 ─── */
+.project-list {
+  display: grid;
+  gap: 18px;
+}
+
+.project {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 26px 28px;
+  background: var(--surface);
+}
+
+.project-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  font-weight: 650;
+}
+
+/* 조직 배지 */
+.org-chip {
+  border-radius: 999px;
+  padding: 2px 11px;
+  font-size: var(--fs-xs);
+  font-weight: 750;
+  background: color-mix(in srgb, currentColor 11%, transparent);
+}
+
+.org-0 {
+  color: var(--org-0);
+}
+
+.org-1 {
+  color: var(--org-1);
+}
+
+.org-2 {
+  color: var(--org-2);
+}
+
+.project-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  margin-bottom: 16px;
+}
+
+.project-head h3 {
+  color: var(--ink);
+  font-size: var(--fs-lg);
+  font-weight: 800;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+}
+
+.project-roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project-roles li {
+  border-radius: 6px;
+  padding: 3px 9px;
+  color: var(--muted);
+  background: var(--chip-bg);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+}
+
+.project-link {
+  margin-left: auto;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px 12px;
+  color: var(--muted);
+  background: var(--surface);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  white-space: nowrap;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.project-link:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* **텍스트** 형광펜 하이라이트 */
+.hl {
+  color: var(--ink);
+  font-weight: 750;
+  background: linear-gradient(transparent 58%, var(--hl-bg) 58%);
+}
+
+.project-summary {
+  margin-bottom: 18px;
+  font-size: var(--fs-base);
+}
+
+.project-detail {
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+
+.project-detail + .project-detail {
+  margin-top: 14px;
+}
+
+.project-detail h4 {
+  margin-bottom: 7px;
+  color: var(--accent);
+  font-size: var(--fs-sm);
+  font-weight: 750;
+}
+
+.project-detail ul {
+  display: grid;
+  gap: 6px;
+  padding-left: 18px;
+}
+
+.project-detail li {
+  font-size: var(--fs-base);
+  line-height: 1.65;
+}
+
+.project-detail li::marker {
+  color: var(--muted);
+}
+
+.project-compact .project-summary {
+  margin-bottom: 14px;
+}
+
+/* ─── 교육 ─── */
+.edu-list {
+  display: grid;
+  gap: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.edu-item {
+  padding: 16px 4px;
+}
+
+.edu-item + .edu-item {
+  border-top: 1px solid var(--line);
+}
+
+.edu-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 2px;
+}
+
+.edu-head strong {
+  color: var(--ink);
+  font-size: var(--fs-md);
+  font-weight: 750;
+}
+
+.edu-head time {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.edu-item p {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+
+/* ─── 푸터 ─── */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 64px;
+  border-top: 1px solid var(--line);
+  padding-top: 22px;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+
+.footer a {
+  font-weight: 650;
+}
+
+.footer a:hover {
+  color: var(--accent);
+}
+
+/* ─── 모바일 ─── */
+@media (max-width: 640px) {
+  .nav-inner {
+    padding: 12px 16px;
+  }
+
+  .nav-links a {
+    padding: 5px 7px;
+  }
+
+  .page {
+    padding: 0 18px 72px;
+  }
+
+  .hero {
+    padding: 52px 0 44px;
+  }
+
+  .section {
+    padding-top: 48px;
+  }
+
+  .project {
+    padding: 22px 18px;
+  }
+
+  .exp-item {
+    padding: 18px;
+  }
+
+  .skill-groups {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── PDF 생성용 인쇄 스타일 ───
+ * Chrome headless 또는 브라우저 인쇄로 PDF를 만들 때 사용하는 스타일입니다.
+ * 1페이지: About + Experience + Skills + Education, 2페이지부터: Projects
+ * (섹션 순서 변경은 app.js의 beforeprint 핸들러가 처리)
+ */
+@page {
+  size: A4;
+  margin: 13mm;
+}
+
+@media print {
+  /* 다크모드였더라도 항상 라이트 팔레트로 인쇄 */
+  :root,
+  :root[data-theme="dark"] {
+    color-scheme: light;
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --ink: #18181b;
+    --text: #3f3f46;
+    --muted: #6b7280;
+    --line: #e4e4e7;
+    --chip-bg: #f4f4f5;
+    --accent: #2563eb;
+    --accent-soft: #eff6ff;
+    --hl-bg: color-mix(in srgb, #2563eb 24%, transparent);
+    --content: 100%;
+
+    /* A4 폭에 맞춘 인쇄용 폰트 스케일 */
+    --fs-xs: 9.5px;
+    --fs-sm: 10.5px;
+    --fs-base: 12px;
+    --fs-md: 13px;
+    --fs-lg: 15px;
+    --fs-xl: 17px;
+    --fs-display: 24px;
+  }
+
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  html,
+  body,
+  .page,
+  section,
+  .hero,
+  .project,
+  .exp-item {
+    background: #ffffff !important;
+  }
+
+  .nav,
+  .footer {
+    display: none;
+  }
+
+  .page {
+    padding: 0;
+  }
+
+  .hero {
+    padding: 0 0 18px;
+  }
+
+  .section {
+    padding-top: 18px;
+  }
+
+  .section-title {
+    margin-bottom: 14px;
+  }
+
+  /* Projects는 항상 2페이지부터 시작 */
+  #projects {
+    break-before: page;
+  }
+
+  /* 카드가 페이지 중간에서 갈라지지 않도록 통째로 다음 페이지로 넘김 */
+  .project,
+  .exp-item,
+  .edu-item {
+    break-inside: avoid;
+  }
+
+  .project {
+    padding: 16px 18px;
+  }
+}

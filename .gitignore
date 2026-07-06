@@ -1,0 +1,22 @@
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Local preview/output files
+preview/
+tmp/
+output/
+
+# Logs and local environment
+*.log
+.env
+.env.*
+!.env.example
+
+# Frontend/tooling artifacts, if added later
+node_modules/
+dist/
+build/
+.cache/
+coverage/
