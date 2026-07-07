@@ -66,9 +66,10 @@
     const links = [
       ["#about", "About"],
       ["#experience", "Experience"],
+      ["#education", "Education"],
+      ["#certificates", "Certificates"],
       ["#skills", "Skills"],
       ["#projects", "Projects"],
-      ["#education", "Education"],
     ];
     nav.innerHTML = `
       <div class="nav-inner">
@@ -150,7 +151,7 @@
     const section = document.getElementById("projects");
     section.innerHTML = `
       <h2 class="section-title">Projects</h2>
-      <p class="section-lead">${esc(RESUME.projectsIntro)}</p>
+      ${RESUME.projectsIntro ? `<p class="section-lead">${esc(RESUME.projectsIntro)}</p>` : ""}
       <div class="project-list">
         ${RESUME.projects.map(projectCard).join("")}
       </div>`;
@@ -201,31 +202,32 @@
           <li class="edu-item">
             <div class="edu-head">
               <strong>${esc(e.name)}</strong>
-              <time>${esc(e.period)}</time>
+              ${e.period ? `<time>${esc(e.period)}</time>` : ""}
             </div>
-            <p>${esc(e.note)}</p>
+            <p>${lines(e.note)}</p>
           </li>`
           )
           .join("")}
       </ul>`;
   }
 
-  /* ---------- PDF 생성용 인쇄 순서 ----------
-   * 화면에서는 Projects → Education 순서지만, PDF 생성 시에는
-   * 1페이지에 Education까지 들어가도록 Education을 Projects 앞으로 옮깁니다.
-   */
-  function initPrint() {
-    window.addEventListener("beforeprint", () => {
-      const edu = document.getElementById("education");
-      const projects = document.getElementById("projects");
-      projects.parentNode.insertBefore(edu, projects);
-    });
-
-    window.addEventListener("afterprint", () => {
-      const edu = document.getElementById("education");
-      const footer = document.getElementById("footer");
-      footer.parentNode.insertBefore(edu, footer);
-    });
+  function renderCertificates() {
+    const section = document.getElementById("certificates");
+    section.innerHTML = `
+      <h2 class="section-title">Certificates</h2>
+      <ul class="edu-list">
+        ${RESUME.certificates
+          .map(
+            (c) => `
+          <li class="edu-item">
+            <div class="edu-head">
+              <strong>${esc(c.name)}</strong>
+              <time>${esc(c.period)}</time>
+            </div>
+          </li>`
+          )
+          .join("")}
+      </ul>`;
   }
 
   /* ---------- footer ---------- */
@@ -239,11 +241,11 @@
   document.title = "Career Portfolio";
   renderNav();
   initTheme();
-  initPrint();
   renderHero();
   renderExperience();
+  renderEducation();
+  renderCertificates();
   renderSkills();
   renderProjects();
-  renderEducation();
   renderFooter();
 })();
